@@ -21,7 +21,7 @@ const PORT=5000;
 // mongodb+srv://rhagavi:rhagavi@cluster0.ubm2h.mongodb.net
 
  MONGO_URL = process.env.MONGO_URL;
-//  const MONGO_URL="mongodb+srv://rhagavi:rhagR123@cluster0.ubm2h.mongodb.net";
+ //const MONGO_URL="mongodb+srv://rhagavi:rhagR123@cluster0.ubm2h.mongodb.net";
 
 async function createConnection() {
         const client = new MongoClient(MONGO_URL);
@@ -100,7 +100,19 @@ result.deletedCount>0
 }
 )
 
-
+app.put("/movies/:id" , async function(req,res)
+{
+  const data=req.body;
+  const id=req.params.id;
+  const results=await client
+  .db("movie")
+  .collection("movie")
+  .updateOne({id:id},{$set:data});
+  results.modifiedCount>0
+  ?res.send({msg:"movie successfully updated"})
+  :res.status(400)
+  .send({msg:"updation unsucessful,movie not found"});
+});
 
 
 app.listen(PORT,()=>console.log(`App started in ${PORT}`));
